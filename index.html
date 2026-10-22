@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10251f">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<title>Pocket Ledger</title>
+<style>
+:root{--bg:#f4f6f3;--card:#fff;--ink:#17231e;--muted:#66736c;--line:#e0e6e1;--green:#176b4d;--pale:#e3f2e9;--red:#b64242;--shadow:0 8px 24px #183b2b0b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,select{font:inherit}button{cursor:pointer}.top{background:#10251f;color:white;padding:24px 18px 28px;border-radius:0 0 24px 24px}.topline{display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{font-weight:750;font-size:20px;letter-spacing:-.4px}.privacy{font-size:11px;background:#24473a;padding:7px 10px;border-radius:99px;color:#d8f1e3}.eyebrow{font-size:12px;color:#b8d2c4;margin-top:24px}.balance{font-size:35px;font-weight:760;letter-spacing:-1px;margin:4px 0 17px}.summary{display:grid;grid-template-columns:1fr 1fr;gap:10px}.sum{background:#1b382e;border:1px solid #315044;border-radius:14px;padding:13px}.sum small{display:block;color:#c1d4ca;margin-bottom:7px}.sum strong{font-size:18px}.wrap{max-width:760px;margin:auto;padding:16px 14px 50px}.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}.btn{border:0;border-radius:12px;padding:12px 10px;font-weight:650}.primary{background:var(--green);color:white}.secondary{background:white;border:1px solid var(--line);color:var(--ink)}.sectionhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:22px 2px 11px}.sectionhead h2{font-size:17px;margin:0}.muted{color:var(--muted);font-size:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:15px;box-shadow:var(--shadow);margin-bottom:12px}.filters{display:grid;grid-template-columns:1fr 1fr;gap:8px}.field{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}.field label{font-size:12px;color:var(--muted);font-weight:650}.field input,.field select{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:white;color:var(--ink);min-width:0}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.full{grid-column:1/-1}.hidden{display:none!important}.tablewrap{overflow:auto}.tx{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.tx:last-child{border-bottom:0}.txname{font-weight:650;overflow-wrap:anywhere}.txmeta{font-size:12px;color:var(--muted);margin-top:4px}.amount{font-weight:750;white-space:nowrap;text-align:right}.income{color:var(--green)}.expense{color:var(--red)}.pill{font-size:11px;background:#edf1ee;border-radius:99px;padding:4px 7px;display:inline-block;margin-top:4px}.empty{text-align:center;color:var(--muted);padding:25px 8px}.barrow{display:grid;grid-template-columns:minmax(88px,1fr) 2fr auto;gap:10px;align-items:center;margin:12px 0;font-size:12px}.bar{height:8px;background:#edf1ee;border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;background:#328261;border-radius:99px}.notice{font-size:12px;line-height:1.5;color:var(--muted);background:#f0f5f1;padding:12px;border-radius:12px}.danger{color:var(--red)}footer{text-align:center;color:var(--muted);font-size:11px;padding:20px 0}dialog{border:0;border-radius:18px;width:calc(100% - 24px);max-width:540px;padding:20px;box-shadow:0 20px 80px #0003}dialog::backdrop{background:#0c1b15a8}.dialoghead{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.dialoghead h2{margin:0;font-size:19px}.close{border:0;background:#edf1ee;border-radius:99px;width:34px;height:34px;font-size:20px}input[type=file]{font-size:13px}.smallbtn{font-size:12px;padding:8px 10px;border-radius:9px}.dangerbtn{color:var(--red);background:#fff;border:1px solid #f0d7d7}
+@media(min-width:620px){.top{padding:28px max(24px,calc((100% - 720px)/2)) 30px}.wrap{padding:20px 18px 50px}.balance{font-size:42px}.actions{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<header class="top">
+ <div class="topline"><div class="brand">◈ Pocket Ledger</div><div class="privacy">🔒 Stored on this device</div></div>
+ <div class="eyebrow">TOTAL TRACKED BALANCE · BASED ON OPENING BALANCES + TRANSACTIONS</div>
+ <div class="balance" id="balance">£0.00</div>
+ <div class="summary">
+  <div class="sum"><small>Income this month</small><strong id="income">£0.00</strong></div>
+  <div class="sum"><small>Spending this month</small><strong id="spending">£0.00</strong></div>
+ </div>
+</header>
+<main class="wrap">
+ <div class="actions">
+  <button class="btn primary" id="addBtn">＋ Add transaction</button>
+  <button class="btn secondary" id="importBtn">⇧ Import bank file</button>
+  <button class="btn secondary" id="exportBtn">⇩ Export CSV</button>
+  <button class="btn secondary" id="accountsBtn">▤ Accounts</button>
+ </div>
+ <div class="notice">Your records stay in this browser on this device. This first version does not send transaction data to a server. For safety, export a backup regularly. Clearing Safari website data can erase locally stored records.</div>
+ <div class="sectionhead"><h2>Spending by category</h2><span class="muted" id="categoryPeriod"></span></div>
+ <div class="card" id="categories"><div class="empty">Add or import transactions to see your spending breakdown.</div></div>
+ <div class="sectionhead"><h2>Transactions</h2><span class="muted" id="txCount">0 records</span></div>
+ <div class="card">
+  <div class="filters">
+   <div class="field"><label for="monthFilter">Month</label><select id="monthFilter"><option value="all">All months</option></select></div>
+   <div class="field"><label for="searchFilter">Search</label><input id="searchFilter" placeholder="Merchant, category…"></div>
+  </div>
+  <div id="transactions"><div class="empty">No transactions yet. Import a bank statement or add one manually.</div></div>
+ </div>
+ <div class="sectionhead"><h2>Bank connection</h2></div>
+ <div class="card">
+  <p style="margin-top:0">Live Open Banking connection is planned for a later version.</p>
+  <p class="muted">A secure connection needs an authorised Open Banking provider and a small secure backend to manage consent and refresh tokens. This local-only version deliberately does not ask for bank login details.</p>
+  <button class="btn secondary" id="bankInfoBtn">How live connections work</button>
+ </div>
+ <footer>Pocket Ledger · Personal finance · Private-by-design prototype</footer>
+</main>
+<dialog id="txDialog">
+ <div class="dialoghead"><h2 id="txTitle">Add transaction</h2><button class="close" data-close="txDialog">×</button></div>
+ <form id="txForm">
+  <div class="formgrid">
+   <div class="field"><label for="date">Date</label><input id="date" type="date" required></div>
+   <div class="field"><label for="type">Type</label><select id="type"><option value="expense">Expense</option><option value="income">Income</option></select></div>
+   <div class="field full"><label for="description">Description / merchant</label><input id="description" required placeholder="e.g. Supermarket, Salary"></div>
+   <div class="field"><label for="amount">Amount (£)</label><input id="amount" type="number" min="0.01" step="0.01" required placeholder="0.00"></div>
+   <div class="field"><label for="category">Category</label><select id="category"></select></div>
+   <div class="field full"><label for="account">Account</label><select id="account"></select></div>
+   <div class="field full"><label for="notes">Notes (optional)</label><input id="notes" placeholder="Optional"></div>
+  </div>
+  <button class="btn primary" style="width:100%" type="submit">Save transaction</button>
+ </form>
+</dialog>
+<dialog id="importDialog">
+ <div class="dialoghead"><h2>Import bank transactions</h2><button class="close" data-close="importDialog">×</button></div>
+ <p class="muted">Choose a CSV file or Excel workbook (.xlsx). Files are read in your browser. Common column names are detected automatically; you can review the preview before importing.</p>
+ <div class="field"><label for="fileInput">Bank export file</label><input id="fileInput" type="file" accept=".csv,.xlsx,.xls,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"></div>
+ <div class="field"><label for="importAccount">Import into account</label><select id="importAccount"></select></div>
+ <div id="importStatus" class="notice">Tip: most UK banks offer transaction exports in online banking under statements or account activity.</div>
+ <div id="preview" class="hidden"></div>
+ <button id="confirmImport" class="btn primary hidden" style="width:100%;margin-top:12px">Import transactions</button>
+</dialog>
+<dialog id="accountsDialog">
+ <div class="dialoghead"><h2>Accounts & opening balances</h2><button class="close" data-close="accountsDialog">×</button></div>
+ <p class="muted">Opening balances help estimate current balances. Set a starting balance for each account, then import transactions after that date to avoid double-counting.</p>
+ <div id="accountList"></div>
+ <form id="accountForm">
+  <div class="field"><label for="newAccount">Add account</label><input id="newAccount" placeholder="e.g. Current account" required></div>
+  <button class="btn secondary" type="submit">Add account</button>
+ </form>
+ <button id="saveAccounts" class="btn primary" style="width:100%;margin-top:14px">Save opening balances</button>
+</dialog>
+<dialog id="infoDialog">
+ <div class="dialoghead"><h2>Live Open Banking</h2><button class="close" data-close="infoDialog">×</button></div>
+ <p>To add live bank feeds, the next version would integrate with a regulated Open Banking provider. You would choose your bank, authenticate on the bank's own website or app, and grant read-only access.</p>
+ <p>For a genuinely private implementation, account tokens should be stored on a secure backend, not inside the app's HTML or local browser storage. We would also need to choose a provider, review costs and supported banks, and add a privacy policy and consent/revocation flow.</p>
+ <p class="notice">Never enter your online banking password into Pocket Ledger. This prototype has no live bank connection.</p>
+</dialog>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script>
+const KEY='pocket-ledger-v1';
+const CATS=['Bills & utilities','Groceries','Transport & fuel','Mortgage / rent','Shopping','Eating out','Entertainment','Health','Insurance','Subscriptions','Salary','Benefits','Interest','Transfer','Cash','Travel','Home','Other'];
+const money=n=>new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP'}).format(Number(n)||0);
+const today=()=>new Date().toISOString().slice(0,10);
+let state={accounts:[{id:'main',name:'Main account',opening:0}],transactions:[]};
+let pendingImport=[];
+function load(){try{const x=JSON.parse(localStorage.getItem(KEY));if(x&&Array.isArray(x.accounts)&&Array.isArray(x.transactions))state=x}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){alert('Could not save locally. Your browser storage may be full or unavailable. Export a backup before continuing.');return false}}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function accountName(id){return state.accounts.find(a=>a.id===id)?.name||'Unknown account'}
+function fillSelects(){const cat=document.querySelector('#category');cat.innerHTML=CATS.map(c=>`<option>${esc(c)}</option>`).join('');const opts=state.accounts.map(a=>`<option value="${esc(a.id)}">${esc(a.name)}</option>`).join('');document.querySelector('#account').innerHTML=opts;document.querySelector('#importAccount').innerHTML=opts}
+function monthOf(d){return String(d||'').slice(0,7)}
+function monthLabel(m){if(!m)return '';const [y,mo]=m.split('-');return new Date(+y,+mo-1,1).toLocaleDateString('en-GB',{month:'long',year:'numeric'})}
+function currentMonth(){return today().slice(0,7)}
+function signed(t){return t.type==='income'?Number(t.amount):-Number(t.amount)}
+function balance(){return state.accounts.reduce((s,a)=>s+Number(a.opening||0),0)+state.transactions.reduce((s,t)=>s+signed(t),0)}
+function render(){
+ fillSelects();
+ const m=currentMonth(), monthTx=state.transactions.filter(t=>monthOf(t.date)===m);
+ document.querySelector('#balance').textContent=money(balance());
+ document.querySelector('#income').textContent=money(monthTx.filter(t=>t.type==='income').reduce((s,t)=>s+Number(t.amount),0));
+ document.querySelector('#spending').textContent=money(monthTx.filter(t=>t.type==='expense').reduce((s,t)=>s+Number(t.amount),0));
+ const months=[...new Set(state.transactions.map(t=>monthOf(t.date)).filter(Boolean))].sort().reverse();
+ const mf=document.querySelector('#monthFilter'), old=mf.value;
+ mf.innerHTML='<option value="all">All months</option>'+months.map(x=>`<option value="${x}">${esc(monthLabel(x))}</option>`).join('');
+ if([...mf.options].some(o=>o.value===old))mf.value=old;
+ const chosen=mf.value, q=document.querySelector('#searchFilter').value.trim().toLowerCase();
+ const filtered=state.transactions.filter(t=>(chosen==='all'||monthOf(t.date)===chosen)&&(!q||[t.description,t.category,t.accountName,t.notes].join(' ').toLowerCase().includes(q))).sort((a,b)=>(b.date||'').localeCompare(a.date||'')||b.id.localeCompare(a.id));
+ document.querySelector('#txCount').textContent=`${filtered.length} record${filtered.length===1?'':'s'}`;
+ document.querySelector('#transactions').innerHTML=filtered.length?filtered.map(t=>`<div class="tx"><div style="min-width:0"><div class="txname">${esc(t.description)}</div><div class="txmeta">${esc(t.date)} · ${esc(accountName(t.accountId)||t.accountName||'Account')}</div><span class="pill">${esc(t.category||'Other')}</span></div><div><div class="amount ${t.type==='income'?'income':'expense'}">${t.type==='income'?'+':'−'}${money(t.amount)}</div><div style="display:flex;gap:5px;justify-content:flex-end;margin-top:7px"><button class="smallbtn secondary" data-edit="${esc(t.id)}">Edit</button><button class="smallbtn dangerbtn" data-delete="${esc(t.id)}">Delete</button></div></div></div>`).join(''):'<div class="empty">No matching transactions.</div>';
+ const catTx=state.transactions.filter(t=>t.type==='expense'&&(chosen==='all'||monthOf(t.date)===chosen));
+ const totals={};catTx.forEach(t=>totals[t.category||'Other']=(totals[t.category||'Other']||0)+Number(t.amount));
+ const sorted=Object.entries(totals).sort((a,b)=>b[1]-a[1]), max=sorted[0]?.[1]||0;
+ document.querySelector('#categoryPeriod').textContent=chosen==='all'?'All time':monthLabel(chosen);
+ document.querySelector('#categories').innerHTML=sorted.length?sorted.map(([c,v])=>`<div class="barrow"><span>${esc(c)}</span><div class="bar"><i style="width:${Math.max(2,v/max*100)}%"></i></div><strong>${money(v)}</strong></div>`).join(''):'<div class="empty">No spending recorded for this period.</div>';
+}
+function open(id){document.getElementById(id).showModal()}
+function resetTxForm(){document.querySelector('#txForm').reset();document.querySelector('#date').value=today();document.querySelector('#txTitle').textContent='Add transaction';document.querySelector('#txForm').dataset.edit=''}
+document.querySelector('#addBtn').onclick=()=>{resetTxForm();open('txDialog')};
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>document.getElementById(b.dataset.close).close());
+document.querySelector('#txForm').onsubmit=e=>{e.preventDefault();const f=e.target,edit=f.dataset.edit;const tx={id:edit||String(Date.now())+'-'+Math.random().toString(36).slice(2,7),date:document.querySelector('#date').value,type:document.querySelector('#type').value,description:document.querySelector('#description').value.trim(),amount:Math.abs(Number(document.querySelector('#amount').value)),category:document.querySelector('#category').value,accountId:document.querySelector('#account').value,notes:document.querySelector('#notes').value.trim()};if(!tx.description||!tx.amount)return;if(edit)state.transactions=state.transactions.map(t=>t.id===edit?tx:t);else state.transactions.push(tx);save();render();document.querySelector('#txDialog').close()};
+document.querySelector('#transactions').onclick=e=>{const del=e.target.closest('[data-delete]'),ed=e.target.closest('[data-edit]');if(del){if(confirm('Delete this transaction?')){state.transactions=state.transactions.filter(t=>t.id!==del.dataset.delete);save();render()}}if(ed){const t=state.transactions.find(t=>t.id===ed.dataset.edit);if(!t)return;resetTxForm();document.querySelector('#txTitle').textContent='Edit transaction';document.querySelector('#txForm').dataset.edit=t.id;for(const k of ['date','type','description','amount','category','account','notes']){const el=document.getElementById(k);if(k==='account')el.value=t.accountId;else if(k==='category')el.value=t.category;else el.value=t[k]??''}open('txDialog')}};
+document.querySelector('#monthFilter').onchange=render;document.querySelector('#searchFilter').oninput=render;
+document.querySelector('#importBtn').onclick=()=>{pendingImport=[];document.querySelector('#fileInput').value='';document.querySelector('#preview').classList.add('hidden');document.querySelector('#confirmImport').classList.add('hidden');document.querySelector('#importStatus').textContent='Tip: most UK banks offer transaction exports in online banking under statements or account activity.';open('importDialog')};
+function norm(s){return String(s||'').toLowerCase().replace(/[^a-z0-9]/g,'')}
+function detect(row,keys){for(const [k,v] of Object.entries(row)){const n=norm(k);if(keys.some(x=>x.includes(n)||n.includes(x)))return v}return ''}
+function parseAmount(v){if(typeof v==='number')return v;let s=String(v??'').trim().replace(/[£,\s]/g,'');if(s.startsWith('(')&&s.endsWith(')'))s='-'+s.slice(1,-1);return Number(s)}
+function parseDate(v){if(v instanceof Date&&!isNaN(v))return v.toISOString().slice(0,10);if(typeof v==='number'&&window.XLSX){const d=XLSX.SSF.parse_date_code(v);if(d)return `${d.y}-${String(d.m).padStart(2,'0')}-${String(d.d).padStart(2,'0')}`}let s=String(v||'').trim();if(!s)return '';let m=s.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})$/);if(m){let y=+m[3];if(y<100)y+=y<50?2000:1900;return `${y}-${String(+m[2]).padStart(2,'0')}-${String(+m[1]).padStart(2,'0')}`}const d=new Date(s);return isNaN(d)?'':d.toISOString().slice(0,10)}
+function autoCat(desc,type){if(type==='income')return /salary|payroll|wage/i.test(desc)?'Salary':'Other';const s=desc.toLowerCase();if(/tesco|aldi|lidl|sainsbury|asda|waitrose|morrisons|grocery|supermarket|co-op/.test(s))return 'Groceries';if(/shell|bp |esso|petrol|fuel|train|uber|bus|parking/.test(s))return 'Transport & fuel';if(/electric|water|gas|council tax|thames water|british gas/.test(s))return 'Bills & utilities';if(/netflix|spotify|prime|disney|subscription/.test(s))return 'Subscriptions';if(/mortgage|rent/.test(s))return 'Mortgage / rent';if(/restaurant|cafe|coffee|deliveroo|just eat|takeaway/.test(s))return 'Eating out';return 'Other'}
+document.querySelector('#fileInput').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{let rows;if(/\.(xlsx|xls)$/i.test(file.name)){if(!window.XLSX)throw Error('Excel reader did not load. Check your internet connection or export the workbook as CSV.');const wb=XLSX.read(await file.arrayBuffer(),{type:'array',cellDates:true});rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''})}else{const text=await file.text();rows=csvParse(text)}if(!rows.length)throw Error('No transaction rows found.');pendingImport=[];for(const r of rows){const date=parseDate(detect(r,['transactiondate','date','bookingdate','valuedate','posteddate']));const desc=String(detect(r,['description','merchant','payee','transaction','details','name','narrative'])).trim();let amountRaw=detect(r,['amount','transactionamount','value']);let amount=parseAmount(amountRaw);const debit=parseAmount(detect(r,['debit','moneyout','paidout']));const credit=parseAmount(detect(r,['credit','moneyin','paidin']));let type,abs;if(Number.isFinite(debit)&&debit!==0||Number.isFinite(credit)&&credit!==0){if((debit||0)!==0){type='expense';abs=Math.abs(debit)}else{type='income';abs=Math.abs(credit)}}else{if(!Number.isFinite(amount)||amount===0||!date||!desc)continue;type=amount<0?'expense':'income';abs=Math.abs(amount)}if(!date||!desc||!Number.isFinite(abs)||abs===0)continue;pendingImport.push({id:String(Date.now())+'-'+Math.random().toString(36).slice(2,9),date,type,description:desc,amount:abs,category:autoCat(desc,type),accountId:document.querySelector('#importAccount').value,notes:''})}if(!pendingImport.length)throw Error('Could not recognise rows. Include date, description and amount columns (or debit and credit columns).');document.querySelector('#importStatus').textContent=`Found ${pendingImport.length} transactions. Check the detected dates, descriptions and amounts before importing. Possible duplicate rows are not automatically removed.`;document.querySelector('#preview').classList.remove('hidden');document.querySelector('#preview').innerHTML='<div class="tablewrap"><table style="width:100%;font-size:12px;border-collapse:collapse"><thead><tr><th align="left">Date</th><th align="left">Description</th><th align="right">Amount</th></tr></thead><tbody>'+pendingImport.slice(0,6).map(t=>`<tr><td style="padding:7px 4px">${esc(t.date)}</td><td style="padding:7px 4px">${esc(t.description)}</td><td align="right" style="padding:7px 4px">${t.type==='expense'?'−':'+'}${money(t.amount)}</td></tr>`).join('')+'</tbody></table></div><div class="muted" style="margin-top:8px">Showing up to 6 preview rows.</div>';document.querySelector('#confirmImport').classList.remove('hidden')}catch(err){document.querySelector('#importStatus').textContent=err.message||'Unable to read file.'}};
+function csvParse(text){const first=text.split(/\r?\n/).find(x=>x.trim())||'';const delim=[',',';','\t'].sort((a,b)=>first.split(b).length-first.split(a).length)[0];let rows=[],row=[],field='',quoted=false;for(let i=0;i<text.length;i++){const c=text[i];if(c==='"'){if(quoted&&text[i+1]==='"'){field+='"';i++}else quoted=!quoted}else if(c===delim&&!quoted){row.push(field);field=''}else if((c==='\n'||c==='\r')&&!quoted){if(c==='\r'&&text[i+1]==='\n')i++;row.push(field);if(row.some(x=>String(x).trim()))rows.push(row);row=[];field=''}else field+=c}row.push(field);if(row.some(x=>String(x).trim()))rows.push(row);if(rows.length<2)return [];const headers=rows.shift().map((h,i)=>String(h).replace(/^\uFEFF/,'').trim()||`column${i}`);return rows.map(r=>Object.fromEntries(headers.map((h,i)=>[h,r[i]??''])))}
+document.querySelector('#confirmImport').onclick=()=>{if(!pendingImport.length)return;state.transactions.push(...pendingImport);save();render();document.querySelector('#importDialog').close();alert(`Imported ${pendingImport.length} transactions. Please review categories and check for duplicates.`)};
+document.querySelector('#exportBtn').onclick=()=>{const rows=[['Date','Description','Type','Amount','Category','Account','Notes'],...state.transactions.map(t=>[t.date,t.description,t.type,t.amount,t.category,accountName(t.accountId),t.notes||''])];const csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));a.download='pocket-ledger-backup.csv';a.click();URL.revokeObjectURL(a.href)};
+document.querySelector('#accountsBtn').onclick=()=>{renderAccounts();open('accountsDialog')};
+function renderAccounts(){document.querySelector('#accountList').innerHTML=state.accounts.map(a=>`<div class="field"><label>${esc(a.name)} — opening balance (£)</label><input type="number" step=".01" data-opening="${esc(a.id)}" value="${Number(a.opening||0)}"></div>`).join('')}
+document.querySelector('#accountForm').onsubmit=e=>{e.preventDefault();const name=document.querySelector('#newAccount').value.trim();if(!name)return;state.accounts.push({id:'acc-'+Date.now(),name,opening:0});document.querySelector('#newAccount').value='';renderAccounts();fillSelects()};
+document.querySelector('#saveAccounts').onclick=()=>{document.querySelectorAll('[data-opening]').forEach(el=>{const a=state.accounts.find(a=>a.id===el.dataset.opening);if(a)a.opening=Number(el.value)||0});save();render();document.querySelector('#accountsDialog').close()};
+document.querySelector('#bankInfoBtn').onclick=()=>open('infoDialog');
+load();render();document.querySelector('#date').value=today();
+</script>
+<script>
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+}
+</script>
+</body>
+</html>
